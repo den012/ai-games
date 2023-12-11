@@ -14,18 +14,18 @@ const Home = () => {
 
     return (
         <div className="h-screen flex flex-col justify-center items-center">
-            <h1 className="text-3xl font-primary font-semibold mb-8">Explore your favourite games</h1>
+            <h1 className="text-3xl font-primary font-semibold mb-8">Your childhood minigame❤️</h1>
             <div className="flex flex-row">
                 <button 
                     onClick={handleGame1}
                     className="text-lg text-white bg-blue-500 hover:text-xl py-2 px-4 rounded-lg m-3"
-                    >Minigame1
+                    >GetStarted
                 </button>
-                <button 
+                {/*<button 
                     onClick={handleGame2}
                     className="text-lg text-white bg-green-500 hover:text-xl py-2 px-4 rounded-lg m-3"
                     >Minigame2
-                </button>
+    </button>*/}
             </div>
         </div>
     );

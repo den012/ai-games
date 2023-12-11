@@ -1,11 +1,10 @@
-from flask import Flask, jsonify, request
+from flask import Blueprint, jsonify, request
 from flask_cors import CORS
 import random
 
-app = Flask(__name__)
-CORS(app)
+ai_move_bp = Blueprint('ai_move_bp', __name__)
 
-@app.route('/make_move', methods=['POST'])
+@ai_move_bp.route('/make_move', methods=['POST'])
 
 def make_move():
     data = request.get_json()
@@ -91,6 +90,3 @@ def minimax(board, depth, isMaximizing):
                 board[i] = None
                 minEval = min(minEval, eval)
         return minEval
-
-if __name__ == '__main__':
-    app.run(port=5001, debug=True)

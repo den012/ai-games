@@ -12,6 +12,21 @@ const Minigame1 = () => {
     const [aiWinCount, setAiWinCount] = useState(0);
     const [playerWinCount, setPlayerWinCount] = useState(0);
 
+    useEffect(() => {
+        getScores();
+    }, []);
+
+    const getScores = async () => {
+        try{
+            const response = await fetch('http://localhost:5001/get_score');
+            const data = await response.json();
+            setPlayerWinCount(data.scores.playerWinCount);
+            setAiWinCount(data.scores.aiWinCount);
+        }catch(error){
+            console.log(error);
+        }
+    };
+
     const handleClick = async (index) => {
         if(!isPlayerTurn || winnerStatus || board[index]){
             return;
@@ -29,6 +44,8 @@ const Minigame1 = () => {
             setPlayerWinCount(playerWinCount + 1);
             setTurnMessage("Game Over");
             setIsPlayerTurn(false);
+
+            updateScores(playerWinCount + 1, aiWinCount);
             return;
         }
 
@@ -67,7 +84,7 @@ const Minigame1 = () => {
         }
     }
 
-    const handleAiMove = (aiMove, currentBoard) => {
+    const handleAiMove =  (aiMove, currentBoard) => {
         if(aiMove != null && !currentBoard[aiMove]){
 
             setTimeout(() => {
@@ -81,6 +98,8 @@ const Minigame1 = () => {
                     setAiWinCount(aiWinCount + 1);
                     setTurnMessage("Game Over");
                     setIsPlayerTurn(false);
+
+                    updateScores(playerWinCount, aiWinCount + 1);
                     return;
                 }
 
@@ -137,6 +156,24 @@ const Minigame1 = () => {
         setDrawStatus(null);
         setIsPlayerTurn(true);
     }
+
+    const updateScores = async (newPlayerWinCount, newAiWinCount) => {
+        try {
+          await fetch('http://localhost:5001/update_score', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              playerWinCount: newPlayerWinCount,
+              aiWinCount: newAiWinCount,
+            }),
+          });
+          console.log('Scores updated successfully');
+        } catch (error) {
+          console.error('Error updating scores:', error);
+        }
+      };
 
     const status = ` ${turnMessage}`;
 
